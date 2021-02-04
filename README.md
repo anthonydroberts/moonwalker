@@ -20,3 +20,7 @@ Replace the fields in `config.json` with your own:
 Install the dependencies with `npm install` and then run the scripts with `npm run start`
 
 The generated reports will be stored as follows: `<cwd>/data/<date>/report.html`
+
+## Demo
+
+![demo](demo.PNG)
