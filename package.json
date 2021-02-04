@@ -1,0 +1,17 @@
+{
+  "name": "moonwalker",
+  "main": "moonwalker.js",
+  "scripts": {
+    "start": "node ./src/moonwalker.js"
+  },
+  "homepage": "https://github.com/anthonydroberts/moonwalker#readme",
+  "dependencies": {
+    "fs-extra": "^9.1.0",
+    "ftp": "^0.3.10",
+    "jsdom": "^16.4.0",
+    "path": "^0.12.7",
+    "sentiment": "^5.0.2",
+    "snoowrap": "^1.22.0"
+  },
+  "type": "module"
+}
