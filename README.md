@@ -1,6 +1,8 @@
 # Moonwalker
 This project is a set of NodeJS scripts that use the Reddit API to scrape the most recent post data from a few popular trading / investing subreddits, and then analyze + generate a report detailing the top stocks based on metrics like content sentiment and karma.
 
+[snoowrap](https://www.npmjs.com/package/snoowrap) is used to leverage Reddit's API, and [sentiment](https://www.npmjs.com/package/sentiment) is used to analyze the scraped content.
+
 ## Requirements
 If you want to run the scripts on your machine you need to setup a few things:
 - Node v13 or higher
