@@ -1,8 +1,8 @@
 import snoowrap from 'snoowrap';
 
 const SUBREDDITS_TO_SCRAPE = [
-    "wallStreetBets",
     "stocks",
+    "wallStreetBets",
     "investing",
     "Baystreetbets"
 ];
