@@ -32,7 +32,6 @@ export default class StockService {
                 this.validStocks.push(ticker);
             }
         }
-        console.log(`Loaded ${this.validStocks.length} NASDAQ traded stocks from ${NASDAQ_FTP_SERVER}`);
     }
 
     async downloadTradedStocks() {

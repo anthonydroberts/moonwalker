@@ -5,7 +5,7 @@ import path from "path"
 const { JSDOM } = jsdom;
 
 export default class ReportService {
-    createReport(symbolsList, stats) {
+    createReport(symbolsList, postData, stats) {
         const dom = new JSDOM (this.getReportSkeleton(stats), { includeNodeLocations: true });
         const document = dom.window.document;
 
@@ -35,7 +35,7 @@ export default class ReportService {
         table2 = this.createTable(table2, symbolsTotalSentimentSorted, document);
         table3 = this.createTable(table3, symbolsTotalKarmaSorted, document);
 
-        this.writeReport(dom);
+        this.writeReport(dom, symbolsList, postData);
     }
 
     createTable(tableElement, symbolsList, document) {
@@ -132,8 +132,8 @@ export default class ReportService {
             </style>
             <div class = "content">
                 <h1>🚀 ${stats.dateISO} Summary 🌕</h1>
-                <h2>Analysed ${stats.wordCount} words across ${stats.postCount} posts</h2>
-                <h2>Discovered ${stats.tickerCount} unique stocks discussed on 5 subreddits</h2>
+                <h2>Analysed ${stats.wordCount.toLocaleString('en')} words across ${stats.postCount.toLocaleString('en')} posts</h2>
+                <h2>Discovered ${stats.tickerCount.toLocaleString('en')} unique stocks discussed on 4 subreddits</h2>
                 <h2>
                     <a href="https://github.com/anthonydroberts/moonwalker">
                         github.com/anthonydroberts/moonwalker
@@ -157,9 +157,9 @@ export default class ReportService {
         `
     }
 
-    writeReport(dom) {
+    writeReport(dom, symbolData, postData) {
         let date = new Date();
-        const reportDate = date.toISOString().slice(0, 10);
+        const reportDate = `${date.toISOString().slice(0, 10)}-${Math.round(Date.now() / 1000)}`;
 
         if (!fs.existsSync("data/")){
             fs.mkdirSync("data/");
@@ -170,5 +170,11 @@ export default class ReportService {
 
         fs.writeFileSync(`data/${reportDate}/report.html`, dom.serialize());
         console.log(`Generated report ${path.resolve(`./data/${reportDate}/report.html`)}`);
+
+        fs.writeFileSync(`data/${reportDate}/symbolData.json`, JSON.stringify(symbolData, null, 4));
+        console.log(`Generated JSON ${path.resolve(`./data/${reportDate}/symbolData.json`)}`);
+
+        fs.writeFileSync(`data/${reportDate}/postData.json`, JSON.stringify(postData, null, 4));
+        console.log(`Generated JSON ${path.resolve(`./data/${reportDate}/postData.json`)}`);
     }
 }

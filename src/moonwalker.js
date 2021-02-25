@@ -32,7 +32,6 @@ const statistics = {
 async function run() {
     stockService.initialize();
     const postData = stockService.getValidTickers(await redditService.collectData());
-    statistics.postCount = postData.length;
     
     let symbols = {};
     for (const post of postData) {
@@ -66,8 +65,9 @@ async function run() {
     let date = new Date();
     statistics.dateISO = date.toISOString().slice(0, 10);
     statistics.tickerCount = Object.keys(symbols).length;
+    statistics.postCount = postData.length;
 
-    reportService.createReport(symbolsList, statistics);
+    reportService.createReport(symbolsList, postData, statistics);
 }
 
 run();

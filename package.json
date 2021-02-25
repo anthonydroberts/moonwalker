@@ -6,6 +6,8 @@
   },
   "homepage": "https://github.com/anthonydroberts/moonwalker#readme",
   "dependencies": {
+    "cli-progress": "^3.9.0",
+    "colors": "^1.4.0",
     "fs-extra": "^9.1.0",
     "ftp": "^0.3.10",
     "jsdom": "^16.4.0",
