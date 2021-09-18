@@ -3,23 +3,34 @@ import RedditService from "./RedditService.js";
 import ReportService from "./ReportService.js";
 import Symbol from "./Symbol.js";
 import Sentiment from "sentiment";
-import fs from "fs-extra";
 import { performance } from "perf_hooks";
 
 const sentiment = new Sentiment();
-const redditService = new RedditService(JSON.parse(fs.readFileSync("config.json")));
+const redditService = new RedditService();
 const reportService = new ReportService();
 const stockService = new StockService();
 
+const SUBREDDITS_TO_SCRAPE = [
+    "stocks",
+    "wallStreetBets",
+    "investing",
+    "Baystreetbets",
+    "Superstonk"
+];
+
 const extraSentimentValues = {
     extras: {
-        "disruptive": 5,
-        "moon": 10,
-        "hold": 2,
-        "rocket": 10,
-        "aggressive": 5,
-        "shoot": 6,
-        "tendies": 7
+        "disruptive": 500,
+        "moon": 600,
+        "hold": 200,
+        "rocket": 300,
+        "aggressive": 50,
+        "shoot": 100,
+        "tendies": 100,
+        "huge": 100,
+        "🚀": 300,
+        "🔥": 250,
+        "🌙": 250
     }
 }
 
@@ -30,13 +41,14 @@ const statistics = {
     timeStart: 0,
     timeEnd: 0,
     timeElapsedSeconds: 0,
+    numberOfSubs: SUBREDDITS_TO_SCRAPE.length,
     dateISO: ""
 }
 
 async function run() {
     statistics.timeStart = performance.now();
     stockService.initialize();
-    const postData = stockService.getValidTickers(await redditService.collectData());
+    const postData = stockService.getValidTickers(await redditService.collectData(SUBREDDITS_TO_SCRAPE, 75));
     
     let symbols = {};
     for (const post of postData) {

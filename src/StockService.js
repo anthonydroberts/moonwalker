@@ -11,7 +11,7 @@ const COMMON_WORDS = [
     "ALL", "EV", "MARK", "DON", "FL", "SHO", "RE", "NEXT", "USA", "OUT",
     "IQ", "SO", "FLY", "BOSS", "OPEN", "WELL", "BAN", "AT", "USD", "SEE", 
     "PT", "AN", "MN", "EVER", "UK", "CAN", "RIDE", "PAYS", "IT", "SUB", "VS",
-    "BEST", "LEAP", "AM"
+    "BEST", "LEAP", "AM", "IS", "YOU", "HUGE", "AI", "ANY", "GOLD"
 ];
 
 export default class StockService {
