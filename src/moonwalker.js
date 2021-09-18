@@ -3,7 +3,8 @@ import RedditService from "./RedditService.js";
 import ReportService from "./ReportService.js";
 import Symbol from "./Symbol.js";
 import Sentiment from "sentiment";
-import fs from "fs-extra"
+import fs from "fs-extra";
+import { performance } from "perf_hooks";
 
 const sentiment = new Sentiment();
 const redditService = new RedditService(JSON.parse(fs.readFileSync("config.json")));
@@ -26,10 +27,14 @@ const statistics = {
     wordCount: 0,
     postCount: 0,
     tickerCount: 0,
+    timeStart: 0,
+    timeEnd: 0,
+    timeElapsedSeconds: 0,
     dateISO: ""
 }
 
 async function run() {
+    statistics.timeStart = performance.now();
     stockService.initialize();
     const postData = stockService.getValidTickers(await redditService.collectData());
     
@@ -54,7 +59,7 @@ async function run() {
             symbols[ticker].negKeyWords = [...symbols[ticker].negKeyWords, ...negKeyWords];
         }
 
-        statistics.wordCount += post.text.length + post.content.length;
+        statistics.wordCount += post.text.split(' ').length + post.content.split(' ').length;
     }
 
     let symbolsList = [];
@@ -66,7 +71,10 @@ async function run() {
     statistics.dateISO = date.toISOString().slice(0, 10);
     statistics.tickerCount = Object.keys(symbols).length;
     statistics.postCount = postData.length;
+    statistics.timeEnd = performance.now();
+    statistics.timeElapsedSeconds = Math.round((statistics.timeEnd - statistics.timeStart) / 1000);
 
+    console.log(`Time elapsed: ${statistics.timeElapsedSeconds} seconds`);
     reportService.createReport(symbolsList, postData, statistics);
 }
 

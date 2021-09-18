@@ -134,6 +134,7 @@ export default class ReportService {
                 <h1>🚀 ${stats.dateISO} Summary 🌕</h1>
                 <h2>Analysed ${stats.wordCount.toLocaleString('en')} words across ${stats.postCount.toLocaleString('en')} posts</h2>
                 <h2>Discovered ${stats.tickerCount.toLocaleString('en')} unique stocks discussed on 4 subreddits</h2>
+                <h2>Runtime: ${stats.timeElapsedSeconds.toLocaleString('en')} seconds</h2>
                 <h2>
                     <a href="https://github.com/anthonydroberts/moonwalker">
                         github.com/anthonydroberts/moonwalker

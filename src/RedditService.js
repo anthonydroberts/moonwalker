@@ -7,10 +7,11 @@ const SUBREDDITS_TO_SCRAPE = [
     "stocks",
     "wallStreetBets",
     "investing",
-    "Baystreetbets"
+    "Baystreetbets",
+    "Superstonk"
 ];
 
-const LIMIT = Infinity;
+const LIMIT = 50;
 const FLOW_LIMIT_ITERATIONS = 10;
 
 export default class RedditService {

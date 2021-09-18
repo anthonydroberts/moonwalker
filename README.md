@@ -26,4 +26,4 @@ The generated reports will be stored as follows: `<cwd>/data/<date>/report.html`
 ## Demo
 
 ![demo](demo.PNG)
-![demo](demo2.PNG)
+![demo2](demo2.PNG)
