@@ -48,7 +48,7 @@ export default class RedditService {
                 if (err.status === 429) {
                     console.log("Exceeded per-minute rate limit!");
                     sleep(60000);
-                    continue
+                    continue;
                 }
                 throw new Error (err)
             }

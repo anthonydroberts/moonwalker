@@ -4,11 +4,18 @@ import ReportService from "./ReportService.js";
 import Symbol from "./Symbol.js";
 import Sentiment from "sentiment";
 import { performance } from "perf_hooks";
+import minimist from "minimist";
 
 const sentiment = new Sentiment();
 const redditService = new RedditService();
 const reportService = new ReportService();
 const stockService = new StockService();
+
+const parsedArgs = minimist((process.argv.slice(2)));
+const opts = {
+    chunks: (parsedArgs.chunks) ? parsedArgs.chunks : 10,
+    email: (parsedArgs.email) ? true : false
+}
 
 const SUBREDDITS_TO_SCRAPE = [
     "stocks",
@@ -47,8 +54,8 @@ const statistics = {
 
 async function run() {
     statistics.timeStart = performance.now();
-    stockService.initialize();
-    const postData = stockService.getValidTickers(await redditService.collectData(SUBREDDITS_TO_SCRAPE, 75));
+    await stockService.initialize();
+    const postData = stockService.getValidTickers(await redditService.collectData(SUBREDDITS_TO_SCRAPE, opts.chunks));
     
     let symbols = {};
     for (const post of postData) {
@@ -87,7 +94,7 @@ async function run() {
     statistics.timeElapsedSeconds = Math.round((statistics.timeEnd - statistics.timeStart) / 1000);
 
     console.log(`Time elapsed: ${statistics.timeElapsedSeconds} seconds`);
-    reportService.createReport(symbolsList, postData, statistics);
+    reportService.createReport(symbolsList, postData, statistics, opts.email);
 }
 
 run();

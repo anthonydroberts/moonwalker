@@ -17,7 +17,7 @@ const COMMON_WORDS = [
 export default class StockService {
 
     constructor() {
-        this.validStocks = [];
+        this.validStocks = new Map();
     }
 
     async initialize() {
@@ -28,7 +28,7 @@ export default class StockService {
         for (const entry of rawNasdaqData) {
             if (entry.length > 0) {
                 const ticker = entry.match(/(?<=\|)(.*?)(?=\|)/)[0];
-                this.validStocks.push(ticker);
+                this.validStocks.set(ticker, 1);
             }
         }
     }
@@ -67,7 +67,7 @@ export default class StockService {
             const captures = entry.text.match(/\b[A-Z]{2,5}\b/g);
             if (captures != null) {
                 for (const match of captures) {
-                    if (this.validStocks.includes(match) && !COMMON_WORDS.includes(match) && !entry.tickers.includes(match)) {
+                    if (this.validStocks.has(match) && !COMMON_WORDS.includes(match) && !entry.tickers.includes(match)) {
                         entry.tickers.push(match);
                     }
                 }

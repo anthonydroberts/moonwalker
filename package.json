@@ -2,7 +2,10 @@
   "name": "moonwalker",
   "main": "moonwalker.js",
   "scripts": {
-    "start": "node ./src/moonwalker.js"
+    "start": "node ./src/moonwalker.js",
+    "long": "node ./src/moonwalker.js --chunks 100",
+    "email": "node ./src/moonwalker.js --chunks 100 --email",
+    "sanity": "node ./src/moonwalker.js --chunks 1 --email"
   },
   "homepage": "https://github.com/anthonydroberts/moonwalker#readme",
   "dependencies": {
@@ -12,6 +15,7 @@
     "fs-extra": "^9.1.0",
     "ftp": "^0.3.10",
     "jsdom": "^16.4.0",
+    "minimist": "^1.2.5",
     "path": "^0.12.7",
     "sentiment": "^5.0.2"
   },

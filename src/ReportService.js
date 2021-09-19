@@ -1,11 +1,12 @@
 import jsdom from "jsdom"
 import fs from "fs-extra"
 import path from "path"
+import EmailService from "./EmailService.js";
 
 const { JSDOM } = jsdom;
 
 export default class ReportService {
-    createReport(symbolsList, postData, stats) {
+    createReport(symbolsList, postData, stats, doEmail) {
         const dom = new JSDOM (this.getReportSkeleton(stats), { includeNodeLocations: true });
         const document = dom.window.document;
 
@@ -36,6 +37,10 @@ export default class ReportService {
         table3 = this.createTable(table3, symbolsTotalKarmaSorted, document);
 
         this.writeReport(dom, symbolsList, postData);
+        if (doEmail) {
+            const emailService = new EmailService();
+            emailService.writeEmail(dom, symbolsList, postData);
+        }
     }
 
     createTable(tableElement, symbolsList, document) {
