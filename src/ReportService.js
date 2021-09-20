@@ -36,10 +36,10 @@ export default class ReportService {
         table2 = this.createTable(table2, symbolsTotalSentimentSorted, document);
         table3 = this.createTable(table3, symbolsTotalKarmaSorted, document);
 
-        this.writeReport(dom, symbolsList, postData);
+        const reportDir = this.writeReport(dom, symbolsList, postData);
         if (doEmail) {
             const emailService = new EmailService();
-            emailService.writeEmail(dom, symbolsList, postData);
+            emailService.writeEmail(stats, dom, symbolsTotalSentimentSorted, reportDir);
         }
     }
 
@@ -166,6 +166,7 @@ export default class ReportService {
     writeReport(dom, symbolData, postData) {
         let date = new Date();
         const reportDate = `${date.toISOString().slice(0, 10)}-${Math.round(Date.now() / 1000)}`;
+        const reportDir = `./data/${reportDate}/`;
 
         if (!fs.existsSync("data/")){
             fs.mkdirSync("data/");
@@ -174,7 +175,7 @@ export default class ReportService {
             fs.mkdirSync(`data/${reportDate}/`);
         }
 
-        fs.writeFileSync(`data/${reportDate}/report.html`, dom.serialize());
+        fs.writeFileSync(reportDir + "report.html", dom.serialize());
         console.log(`Generated report ${path.resolve(`./data/${reportDate}/report.html`)}`);
 
         fs.writeFileSync(`data/${reportDate}/symbolData.json`, JSON.stringify(symbolData, null, 4));
@@ -182,5 +183,7 @@ export default class ReportService {
 
         fs.writeFileSync(`data/${reportDate}/postData.json`, JSON.stringify(postData, null, 4));
         console.log(`Generated JSON ${path.resolve(`./data/${reportDate}/postData.json`)}`);
+
+        return reportDir;
     }
 }

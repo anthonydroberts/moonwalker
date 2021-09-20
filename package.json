@@ -14,8 +14,10 @@
     "colors": "^1.4.0",
     "fs-extra": "^9.1.0",
     "ftp": "^0.3.10",
+    "html-pdf-node": "^1.0.7",
     "jsdom": "^16.4.0",
     "minimist": "^1.2.5",
+    "nodemailer": "^6.6.3",
     "path": "^0.12.7",
     "sentiment": "^5.0.2"
   },
