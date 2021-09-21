@@ -1,29 +1,39 @@
 # Moonwalker
-This project is a set of NodeJS scripts that use the Reddit API to scrape the most recent post data from a few popular trading / investing subreddits, and then analyze + generate a report detailing the top stocks based on metrics like content sentiment and karma.
+This project is a set of NodeJS scripts that use [pushshift](https://pushshift.io/) to scrape the most recent post data from a few popular trading / investing subreddits, and then analyze + generate a report detailing the top stocks based on metrics like content sentiment and karma.
 
-[snoowrap](https://www.npmjs.com/package/snoowrap) is used to leverage Reddit's API, and [sentiment](https://www.npmjs.com/package/sentiment) is used to analyze the scraped content.
+[sentiment](https://www.npmjs.com/package/sentiment) is used to analyze the scraped content.
 
 ## Requirements
-If you want to run the scripts on your machine you need to setup a few things:
+To run the scripts on your machine:
 - Node v13 or higher
-- Valid Reddit API Client ID / Client Secret / Refresh Token, you can set this up [here](https://not-an-aardvark.github.io/reddit-oauth-helper/)
 
-Replace the fields in `config.json` with your own:
-```json
-{
-    "clientId": "myClientId",
-    "clientSecret": "myClientSecret",
-    "refreshToken": "myRefreshToken"
-}
-```
+If you want to use the automatic emailing, set the following environment variables:
+
+`export MOONWALKER_EMAIL_HOST=<email server host>`
+
+`export MOONWALKER_EMAIL_PORT=<email server port>`
+
+`export MOONWALKER_EMAIL_USER=<account username for authentication>`
+
+`export MOONWALKER_EMAIL_PASS=<account password for authentication>`
+
+`export MOONWALKER_EMAIL_MAILING_LIST=<comma-seperated mailing list>`
+
+Running the github actions workflow also requires that these environment variables are set as repository secrets
 
 ## Usage
 
-Install the dependencies with `npm install` and then run the scripts with `npm run start`
+Install the dependencies with `npm install` and then run the scripts with `npm run sanity` or `npm run long`
 
-The generated reports will be stored as follows: `<cwd>/data/<date>/report.html`
+Using `npm run email` will also send a PDF copy of the report via email, and a short summary about the stock with the top sentiment
+
+The generated reports / data will be stored in the following directory: `<cwd>/data/<date>/`
 
 ## Demo
 
 ![demo](demo.PNG)
+
 ![demo2](demo2.PNG)
+
+## Example Email
+![demo3](demo3.png)

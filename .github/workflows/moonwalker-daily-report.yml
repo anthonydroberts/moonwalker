@@ -1,0 +1,26 @@
+name: Daily Moonwalker Report
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * *'
+jobs:
+  Run-Daily-Report:
+    runs-on: ubuntu-latest
+    env:
+      MOONWALKER_EMAIL_HOST: ${{ secrets.MOONWALKER_EMAIL_HOST }}
+      MOONWALKER_EMAIL_PORT: ${{ secrets.MOONWALKER_EMAIL_PORT }}
+      MOONWALKER_EMAIL_USER: ${{ secrets.MOONWALKER_EMAIL_USER }}
+      MOONWALKER_EMAIL_PASS: ${{ secrets.MOONWALKER_EMAIL_PASS }}
+      MOONWALKER_EMAIL_MAILING_LIST: ${{ secrets.MOONWALKER_EMAIL_MAILING_LIST }}
+    steps:
+      - run: echo "Job triggered by a ${{ github.event_name }} event."
+      - name: Check out repo code
+        uses: actions/checkout@v2
+      - name: Setup node 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'npm'
+      - run: npm install
+      - run: npm run email
+      - run: echo "Job complete | Status= ${{ job.status }}."

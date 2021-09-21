@@ -17,9 +17,10 @@ export default class EmailService {
             }
         });
         this.mailOptions = {
-            from: `moonserver@${process.env.MOONWALKER_EMAIL_HOST}`,
+            from: `Moonwalker Report <moonserver@${process.env.MOONWALKER_EMAIL_HOST}>`,
             to: process.env.MOONWALKER_EMAIL_MAILING_LIST,
             subject: '',
+            html: '',
             attachments: [
                 {
                     filename: '',
@@ -30,7 +31,9 @@ export default class EmailService {
     }
 
     async writeEmail(stats, dom, symbolsTotalSentimentSorted, reportDir) {
-        this.mailOptions.subject = await this.getEmailSubject(symbolsTotalSentimentSorted);
+        const topStockData = await this.getStockData(symbolsTotalSentimentSorted[0].code);
+        this.mailOptions.subject = this.getEmailSubject(topStockData);
+        this.mailOptions.html = this.getEmailBody(topStockData);
         this.mailOptions.attachments[0].filename = `${stats.dateISO}-moonwalker-report.pdf`;
         this.mailOptions.attachments[0].path = await this.generatePdfReport(reportDir, dom);
         await this.transporter.sendMail(this.mailOptions, (error, info) => {
@@ -48,14 +51,35 @@ export default class EmailService {
         await htmlToPdf.generatePdf(file, options).then(pdfBuffer => {
             console.log("Creating PDF: ", pdfBuffer);
         });
-        console.log(reportDir + "report.pdf")
         console.log(`Generated report ${path.resolve(reportDir + "report.pdf")}`);
         return reportDir + "report.pdf";
     }
 
-    async getEmailSubject(symbolsTotalSentimentSorted) {
-        const topStockData = (await axios.get(STOCK_API_URL + symbolsTotalSentimentSorted[0].code)).data;
-        let subject = `${this.getDayString()}'s sentiment: $${topStockData.ticker} | ${topStockData.shortName} | ${topStockData.currentPrice} ${topStockData.percentText} | ${this.getRandomArticle(topStockData)}`;
+    async getStockData(symbol) {
+        return (await axios.get(STOCK_API_URL + symbol)).data;
+    }
+
+    getEmailBody(topStockData) {
+        return `
+            <!DOCTYPE html>
+            <html>
+            <body>
+                <h3>Today's Sentiment</h3>
+                <h4>$${topStockData.ticker} | ${topStockData.shortName} | ${topStockData.currentPrice} | ${topStockData.percentTextYear} YOY</h4>
+                <h5>Top Holder: ${topStockData.holder0} with ${topStockData.sharesAmount0} shares | Rating: ${topStockData.invWords}</h5>
+                <a href="${topStockData.newsLink1}">${topStockData.newsArticle1}</a><br>
+                <a href="${topStockData.newsLink2}">${topStockData.newsArticle2}</a><br>
+                <a href="${topStockData.newsLink3}">${topStockData.newsArticle3}</a><br>
+                <a href="${topStockData.newsLink4}">${topStockData.newsArticle4}</a><br>
+                <a href="${topStockData.newsLink5}">${topStockData.newsArticle5}</a><br>
+                <p>${topStockData.companyDescription}</p>
+            </body>
+            </html>
+        `
+    }
+
+    getEmailSubject(topStockData) {
+        let subject = `${this.getDayString()}'s sentiment: $${topStockData.ticker} | ${topStockData.shortName} | ${topStockData.currentPrice} ${topStockData.percentTextYear} YOY | ${this.getRandomArticle(topStockData)}`;
         if (subject.length > 89) {
             subject = subject.substr(0, 89);
             subject += "...";
