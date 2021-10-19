@@ -46,7 +46,7 @@ export default class RedditService {
                 }
             } catch (err) {
                 if (err.response.status === 429) {
-                    console.log("Exceeded per-minute rate limit!");
+                    console.log(`\n *** Exceeded per-minute rate limit: ${this.postCount} posts ***`);
                     await sleep(60000);
                     continue;
                 }
@@ -61,7 +61,7 @@ export default class RedditService {
             this.progress.updateETA();
 
             // pushshift.io limits the amount of requests allowed per minute to rateLimit. Sleep to roughly avoid going over the limit
-            await sleep((60000 / rateLimit) + 25);
+            await sleep((60000 / rateLimit) + 300);
         }
 
         posts.forEach((post) => {
