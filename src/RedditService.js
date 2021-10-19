@@ -45,12 +45,12 @@ export default class RedditService {
                     break;
                 }
             } catch (err) {
-                if (err.status === 429) {
+                if (err.response.status === 429) {
                     console.log("Exceeded per-minute rate limit!");
-                    sleep(60000);
+                    await sleep(60000);
                     continue;
                 }
-                throw new Error (err)
+                throw new Error(err);
             }
             
             beforeUTC = newPosts[newPosts.length - 1].created_utc;
