@@ -25,6 +25,7 @@ jobs:
       - name: npm run email
         uses: nick-invision/retry@v2
         with:
+          timeout_minutes: 65
           max_attempts: 3
           command: npm run email
       - run: echo "Job complete | Status= ${{ job.status }}."
