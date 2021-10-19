@@ -21,7 +21,6 @@ const SUBREDDITS_TO_SCRAPE = [
     "stocks",
     "wallStreetBets",
     "investing",
-    "Baystreetbets",
     "Superstonk"
 ];
 
