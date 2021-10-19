@@ -50,7 +50,8 @@ export default class RedditService {
                     await sleep(60000);
                     continue;
                 }
-                throw new Error(err);
+                console.log(err.message);
+                process.exit(1);
             }
             
             beforeUTC = newPosts[newPosts.length - 1].created_utc;

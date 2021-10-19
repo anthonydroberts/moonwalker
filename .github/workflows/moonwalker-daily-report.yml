@@ -22,5 +22,9 @@ jobs:
           node-version: '14'
           cache: 'npm'
       - run: npm install
-      - run: npm run email
+      - name: npm run email
+        uses: nick-invision/retry@v2
+        with:
+          max_attempts: 3
+          command: npm run email
       - run: echo "Job complete | Status= ${{ job.status }}."
