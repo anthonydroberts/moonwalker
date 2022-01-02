@@ -27,6 +27,9 @@ Install the dependencies with `npm install` and then run the scripts with `npm r
 
 Using `npm run email` will also send a PDF copy of the report via email, and a short summary about the stock with the top sentiment
 
+You can override the default subreddits to scrape by passing in the `--subreddits` argument followed by a comma seperated list of subreddits to any npm run script
+Ex. `npm run email -- --subreddits investing,stocks`
+
 The generated reports / data will be stored in the following directory: `<cwd>/data/<date>/`
 
 ## Demo
